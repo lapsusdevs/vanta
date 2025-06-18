@@ -1,0 +1,46 @@
+{
+  "name": "lapsus-vanta",
+  "version": "0.1.0",
+  "description": "Lapsus Vanta Antivirus",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder"
+  },
+  "keywords": [
+    "antivirus",
+    "electron"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^28.2.3",
+    "electron-builder": "^24.9.1"
+  },
+  "dependencies": {
+    "chokidar": "^3.5.3"
+  },
+  "build": {
+    "appId": "com.lapsusvanta.antivirus",
+    "productName": "Lapsus Vanta",
+    "win": {
+      "target": "nsis",
+      "icon": "build/icon.ico"
+    },
+    "files": [
+      "main.js",
+      "index.html",
+      "renderer.js",
+      "preload.js",
+      "styles.css",
+      "watched_folder/",
+      "!node_modules/.cache/",
+      "!dist/",
+      "!*.{map,pdb,sln,obj,lib,exp,ilk,vcxproj,filters,user}"
+    ],
+    "directories": {
+      "buildResources": "build",
+      "output": "dist_electron"
+    }
+  }
+}

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Lapsus Vanta</title>
+    <link rel="stylesheet" href="styles.css">
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+</head>
+<body>
+    <div id="app-container">
+        <nav>
+            <h2>Lapsus Vanta</h2>
+            <ul>
+                <li><a href="#" data-section="dashboard" class="active">Dashboard</a></li>
+                <li><a href="#" data-section="scan">Scan</a></li>
+                <li><a href="#" data-section="settings">Settings</a></li>
+                <li><a href="#" data-section="quarantine">Quarantine</a></li>
+                <li><a href="#" data-section="updates">Updates</a></li>
+            </ul>
+        </nav>
+        <main>
+            <section id="dashboard" class="content-section active">
+                <h3>Dashboard</h3>
+                <div class="placeholder">
+                    <p>System status and quick actions will appear here.</p>
+                </div>
+            </section>
+            <section id="scan" class="content-section">
+                <h3>Scan</h3>
+                <div class="placeholder">
+                    <p>Scan options and progress will be displayed here.</p>
+                    <button>Start Quick Scan</button>
+                    <button>Start Full Scan</button>
+                </div>
+            </section>
+            <section id="settings" class="content-section">
+                <h3>Settings</h3>
+                <div class="placeholder">
+                    <p>Application settings and preferences will be configured here.</p>
+                </div>
+            </section>
+            <section id="quarantine" class="content-section">
+                <h3>Quarantine</h3>
+                <div class="placeholder">
+                    <p>Quarantined files will be listed here.</p>
+                </div>
+            </section>
+            <section id="updates" class="content-section">
+                <h3>Updates</h3>
+                <div class="placeholder">
+                    <p>Check for updates and view update history.</p>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="./renderer.js"></script>
+</body>
+</html>
