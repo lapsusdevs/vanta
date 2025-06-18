@@ -1,12 +1,20 @@
 name: Electron Build and Release
 
 on:
-  release:
-    types: [created]
+  push:
+    branches:
+      - main # Or your primary branch, e.g., master
 
 jobs:
   build-and-release:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+
+    # Grant GITHUB_TOKEN permissions to write Releases
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout code
@@ -15,32 +23,42 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18' # Or your preferred LTS version
+          node-version: '20'
+          cache: 'npm' # Cache npm dependencies
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci # Use ci for cleaner installs
 
       - name: Build application
-        run: npm run dist # This uses electron-builder
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Make GH_TOKEN available for electron-builder if needed for publishing
+        run: npm run dist
 
       - name: Upload Windows Installer Artifact
+        if: matrix.os == 'windows-latest'
         uses: actions/upload-artifact@v4
         with:
-          name: LapsusVanta-Windows-Installer
-          path: dist_electron/*.exe # Path to the NSIS installer
-          if-no-files-found: error # Fails the workflow if the installer is not found
+          name: LapsusVanta-${{ matrix.os }}
+          path: dist_electron/*.exe
+          if-no-files-found: error
 
-      # Optional: Upload for other platforms if configured
-      # - name: Upload Linux AppImage Artifact
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: LapsusVanta-Linux-AppImage
-      #     path: dist_electron/*.AppImage
-      #     if-no-files-found: error
+      - name: Upload Linux Artifact
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: LapsusVanta-${{ matrix.os }}
+          # electron-builder produces .AppImage by default for linux, but also .snap and .deb if configured.
+          # This path will grab the .AppImage. Adjust if you expect other formats.
+          path: |
+            dist_electron/*.AppImage
+            dist_electron/*.snap
+            dist_electron/*.deb
+          if-no-files-found: error # Fails if no AppImage, snap, or deb is found
 
-      # - name: Upload macOS DMG Artifact
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: LapsusVanta-macOS-DMG
-      #     path: dist_electron/*.dmg
-      #     if-no-files-found: error
+      - name: Upload macOS DMG Artifact
+        if: matrix.os == 'macos-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: LapsusVanta-${{ matrix.os }}
+          path: dist_electron/*.dmg
+          if-no-files-found: error
